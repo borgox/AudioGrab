@@ -23,6 +23,8 @@
     <string name="label_quality">Qualita MP3</string>
     <string name="label_cookies">Cookie (opzionale)</string>
     <string name="cookies_placeholder">Incolla i cookie di YouTube se i download falliscono</string>
+    <string name="action_clear_cookies">Cancella cookie</string>
+    <string name="label_version">Versione %1$s</string>
     <string name="quality_best">Migliore (VBR)</string>
     <string name="quality_balanced">Bilanciata (VBR)</string>
     <string name="quality_high">Alta (192 kbps)</string>

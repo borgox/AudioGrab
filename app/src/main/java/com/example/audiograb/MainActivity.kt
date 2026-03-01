@@ -412,6 +412,18 @@ private fun DownloadSettingsCard(
                 minLines = 2,
                 maxLines = 4
             )
+            if (cookieHeader.isNotBlank()) {
+                Button(
+                    onClick = { onCookieChange("") },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                ) {
+                    Text(text = stringResource(id = R.string.action_clear_cookies))
+                }
+            }
+            Text(
+                text = stringResource(id = R.string.label_version, getAppVersion(context)),
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }
@@ -893,6 +905,15 @@ private fun parseUrls(text: String): List<String> {
         .filter { it.isNotBlank() }
         .forEach { unique.add(it) }
     return unique.toList()
+}
+
+private fun getAppVersion(context: Context): String {
+    return try {
+        val info = context.packageManager.getPackageInfo(context.packageName, 0)
+        info.versionName ?: ""
+    } catch (_: Exception) {
+        ""
+    }
 }
 
 private suspend fun fetchMetadataIfNeeded(
@@ -1428,13 +1449,22 @@ private fun downloadToFile(
         return
     }
 
-    errors.get()?.let { throw it }
+    errors.get()?.let { error ->
+        partFiles.forEach { part ->
+            if (part.exists()) {
+                part.delete()
+            }
+        }
+        throw error
+    }
 
     FileOutputStream(target).use { output ->
         partFiles.forEach { part ->
             if (part.exists()) {
                 FileInputStream(part).use { input -> input.copyTo(output) }
                 part.delete()
+            } else {
+                throw IllegalStateException("Missing download part")
             }
         }
     }
