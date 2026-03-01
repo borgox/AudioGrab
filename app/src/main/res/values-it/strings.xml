@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">AudioGrab</string>
+
+    <string name="setup_title">Benvenuto in AudioGrab</string>
+    <string name="setup_subtitle">Scarica audio MP3 dai link video direttamente sul tuo dispositivo.</string>
+    <string name="setup_step_one">1. Incolla uno o piu link</string>
+    <string name="setup_step_two">2. Controlla i dettagli</string>
+    <string name="setup_step_three">3. Scegli una cartella e scarica</string>
+    <string name="setup_primary_action">Inizia</string>
+
+    <string name="headline">AudioGrab</string>
+    <string name="tagline">Download MP3 con anteprime e supporto batch.</string>
+
+    <string name="tab_single">Singolo</string>
+    <string name="tab_bulk">Multiplo</string>
+
+    <string name="settings_title">Impostazioni download</string>
+    <string name="label_save_to">Salva in</string>
+    <string name="action_choose_folder">Scegli cartella</string>
+    <string name="action_clear_folder">Usa cartella app</string>
+    <string name="folder_app_default">Music/AudioGrab</string>
+
+    <string name="label_quality">Qualita MP3</string>
+    <string name="label_cookies">Cookie (opzionale)</string>
+    <string name="cookies_placeholder">Incolla i cookie di YouTube se i download falliscono</string>
+    <string name="quality_best">Migliore (VBR)</string>
+    <string name="quality_balanced">Bilanciata (VBR)</string>
+    <string name="quality_high">Alta (192 kbps)</string>
+    <string name="quality_standard">Standard (128 kbps)</string>
+
+    <string name="single_title">Link singolo</string>
+    <string name="bulk_title">Link multipli</string>
+    <string name="bulk_list_title">Link</string>
+    <string name="bulk_hint">Incolla un link per riga</string>
+
+    <string name="paste">Incolla</string>
+    <string name="action_download">Scarica MP3</string>
+    <string name="action_download_all">Scarica tutto</string>
+
+    <string name="link_placeholder">https://example.com/video</string>
+    <string name="link_valid">Va bene.</string>
+    <string name="link_invalid">Inserisci un link web completo.</string>
+    <string name="message_invalid">Quel link non sembra valido. Riprova.</string>
+
+    <string name="preview_title">Anteprima</string>
+    <string name="message_select_link">Seleziona un link per vedere i dettagli.</string>
+    <string name="message_fetching">Caricamento dettagli...</string>
+    <string name="message_fetch_failed">Impossibile caricare i dettagli. Puoi comunque provare a scaricare.</string>
+    <string name="message_download_failed">Download non riuscito. Riprova.</string>
+    <string name="message_convert_failed">Conversione non riuscita. Riprova.</string>
+    <string name="message_converting">Conversione in MP3...</string>
+    <string name="message_saved">Salvato: %1$s</string>
+
+    <string name="status_ready">Pronto</string>
+    <string name="status_fetching">Caricamento dettagli</string>
+    <string name="status_downloading">Download</string>
+    <string name="status_converting">Conversione in MP3</string>
+    <string name="status_done">Salvato</string>
+    <string name="status_error">Errore</string>
+
+    <string name="bulk_count">Link: %1$d</string>
+
+    <string name="helpful_tips">Consigli utili</string>
+    <string name="tips_body">• Usa link pubblici che puoi scaricare.\n• Tieni l’app aperta mentre lavora.\n• Gli MP3 finiscono nella cartella scelta o Music/AudioGrab.</string>
+</resources>

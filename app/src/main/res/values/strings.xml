@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">AudioGrab</string>
+
+    <string name="setup_title">Welcome to AudioGrab</string>
+    <string name="setup_subtitle">Download MP3 audio from video links on your device.</string>
+    <string name="setup_step_one">1. Paste one link or many</string>
+    <string name="setup_step_two">2. Review the details</string>
+    <string name="setup_step_three">3. Pick a folder and download</string>
+    <string name="setup_primary_action">Start</string>
+
+    <string name="headline">AudioGrab</string>
+    <string name="tagline">MP3 downloads with previews and bulk support.</string>
+
+    <string name="tab_single">Single</string>
+    <string name="tab_bulk">Bulk</string>
+
+    <string name="settings_title">Download settings</string>
+    <string name="label_save_to">Save to</string>
+    <string name="action_choose_folder">Choose folder</string>
+    <string name="action_clear_folder">Use app folder</string>
+    <string name="folder_app_default">Music/AudioGrab</string>
+
+    <string name="label_quality">MP3 quality</string>
+    <string name="label_cookies">Cookies (optional)</string>
+    <string name="cookies_placeholder">Paste YouTube cookies here if downloads fail</string>
+    <string name="quality_best">Best (VBR)</string>
+    <string name="quality_balanced">Balanced (VBR)</string>
+    <string name="quality_high">High (192 kbps)</string>
+    <string name="quality_standard">Standard (128 kbps)</string>
+
+    <string name="single_title">Single link</string>
+    <string name="bulk_title">Bulk links</string>
+    <string name="bulk_list_title">Links</string>
+    <string name="bulk_hint">Paste one link per line</string>
+
+    <string name="paste">Paste</string>
+    <string name="action_download">Download MP3</string>
+    <string name="action_download_all">Download All</string>
+
+    <string name="link_placeholder">https://example.com/video</string>
+    <string name="link_valid">Looks good.</string>
+    <string name="link_invalid">Please enter a full web link.</string>
+    <string name="message_invalid">That link does not look valid. Please try again.</string>
+
+    <string name="preview_title">Preview</string>
+    <string name="message_select_link">Select a link to see details.</string>
+    <string name="message_fetching">Fetching details...</string>
+    <string name="message_fetch_failed">Could not load details. You can still try downloading.</string>
+    <string name="message_download_failed">Download failed. Please try again.</string>
+    <string name="message_convert_failed">Conversion failed. Please try again.</string>
+    <string name="message_converting">Converting to MP3...</string>
+    <string name="message_saved">Saved: %1$s</string>
+
+    <string name="status_ready">Ready</string>
+    <string name="status_fetching">Fetching details</string>
+    <string name="status_downloading">Downloading</string>
+    <string name="status_converting">Converting to MP3</string>
+    <string name="status_done">Saved</string>
+    <string name="status_error">Error</string>
+
+    <string name="bulk_count">Links: %1$d</string>
+
+    <string name="helpful_tips">Helpful tips</string>
+    <string name="tips_body">• Use public links you are allowed to download.\n• Keep the app open while it works.\n• MP3s go to your chosen folder or Music/AudioGrab.</string>
+</resources>
