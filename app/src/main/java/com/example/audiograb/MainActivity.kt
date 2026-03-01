@@ -107,11 +107,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
 
-// Entry point Activity for the Compose UI.
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize the extractor once before UI renders.
         ensureNewPipeInitialized()
         setContent {
             AudioGrabTheme {
@@ -123,7 +121,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Metadata loading state for a single URL.
 private enum class MetaStatus {
     Idle,
     Loading,
@@ -131,7 +128,6 @@ private enum class MetaStatus {
     Error
 }
 
-// Metadata values for previews.
 private data class MetaState(
     val status: MetaStatus = MetaStatus.Idle,
     val title: String = "",
@@ -141,7 +137,6 @@ private data class MetaState(
     val message: String = ""
 )
 
-// Download and conversion state machine.
 private enum class DownloadStatus {
     Idle,
     Downloading,
@@ -150,7 +145,6 @@ private enum class DownloadStatus {
     Error
 }
 
-// UI state for download progress and messaging.
 private data class DownloadState(
     val status: DownloadStatus = DownloadStatus.Idle,
     val progress: Float = 0f,
@@ -158,7 +152,6 @@ private data class DownloadState(
     val outputFileName: String = ""
 )
 
-// MP3 conversion quality presets.
 private enum class QualityOption(val ffmpegArgs: String) {
     Best("-q:a 2"),
     Balanced("-q:a 5"),
@@ -166,7 +159,6 @@ private enum class QualityOption(val ffmpegArgs: String) {
     Standard("-b:a 128k")
 }
 
-// Result type for extractor metadata lookup.
 private data class MetaResult(
     val success: Boolean,
     val title: String,
@@ -176,7 +168,6 @@ private data class MetaResult(
     val message: String
 )
 
-// Result type for download and conversion work.
 private data class DownloadResult(
     val success: Boolean,
     val message: String,
@@ -184,20 +175,17 @@ private data class DownloadResult(
     val title: String
 )
 
-// Selected stream info used for downloading.
 private data class SelectedStream(
     val url: String,
     val suffix: String,
     val kind: String
 )
 
-// Shared HTTP client for extractor and downloads.
 private val httpClient = OkHttpClient.Builder().build()
 @Volatile
 private var globalCookieHeader: String = ""
 
 @Composable
-// Top-level UI container with tabs and shared state.
 private fun AppScreen() {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -216,7 +204,6 @@ private fun AppScreen() {
     val metadataState = remember { mutableStateMapOf<String, MetaState>() }
     val downloadState = remember { mutableStateMapOf<String, DownloadState>() }
 
-    // SAF folder picker for custom save location.
     val folderPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
         if (uri != null) {
             persistFolderPermission(context, uri)
@@ -229,14 +216,12 @@ private fun AppScreen() {
 
     val bulkUrls = remember(bulkText) { parseUrls(bulkText) }
 
-    // Auto-fetch metadata for the single URL when it becomes valid.
     LaunchedEffect(trimmedSingleUrl) {
         if (isSingleValid) {
             fetchMetadataIfNeeded(trimmedSingleUrl, metadataState)
         }
     }
 
-    // Auto-fetch metadata for all bulk URLs and keep selection in sync.
     LaunchedEffect(bulkUrls) {
         if (bulkUrls.isEmpty()) {
             selectedUrl = ""
@@ -367,7 +352,6 @@ private fun AppScreen() {
 }
 
 @Composable
-// Settings panel for folder, quality, and cookies.
 private fun DownloadSettingsCard(
     selectedFolderUri: Uri?,
     onChooseFolder: () -> Unit,
@@ -433,7 +417,6 @@ private fun DownloadSettingsCard(
 }
 
 @Composable
-// Dropdown selector for MP3 quality presets.
 private fun QualitySelector(
     qualityOption: QualityOption,
     onQualityChange: (QualityOption) -> Unit
@@ -493,7 +476,6 @@ private fun QualitySelector(
 }
 
 @Composable
-// Single-link download tab.
 private fun SingleTab(
     clipboardText: String,
     url: String,
@@ -545,7 +527,6 @@ private fun SingleTab(
 }
 
 @Composable
-// URL validation feedback row.
 private fun ValidationRow(isValid: Boolean) {
     Text(
         text = if (isValid) {
@@ -563,7 +544,6 @@ private fun ValidationRow(isValid: Boolean) {
 }
 
 @Composable
-// Bulk download tab with list and selection preview.
 private fun BulkTab(
     bulkText: String,
     onBulkTextChange: (String) -> Unit,
@@ -693,7 +673,6 @@ private fun BulkTab(
 }
 
 @Composable
-// Preview card showing thumbnail, channel, and title.
 private fun PreviewCard(
     metaState: MetaState,
     downloadState: DownloadState,
@@ -756,7 +735,6 @@ private fun PreviewCard(
 }
 
 @Composable
-// Progress and status card shown during download/conversion.
 private fun DownloadStatusCard(downloadState: DownloadState) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -814,7 +792,6 @@ private fun DownloadStatusCard(downloadState: DownloadState) {
 }
 
 @Composable
-// App header branding block.
 private fun HeaderBlock() {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
@@ -829,7 +806,6 @@ private fun HeaderBlock() {
 }
 
 @Composable
-// Helpful tips block.
 private fun InfoCard() {
     Card(
         shape = RoundedCornerShape(22.dp),
@@ -849,7 +825,6 @@ private fun InfoCard() {
 }
 
 @Composable
-// Intro screen shown before first use.
 private fun SetupScreen(onStart: () -> Unit) {
     Column(
         modifier = Modifier
@@ -907,12 +882,10 @@ private fun SetupScreen(onStart: () -> Unit) {
     }
 }
 
-// Basic URL validation for inputs.
 private fun isValidUrl(url: String): Boolean {
     return url.isNotBlank() && Patterns.WEB_URL.matcher(url).matches()
 }
 
-// Parse newline-separated URLs with deduping.
 private fun parseUrls(text: String): List<String> {
     val unique = LinkedHashSet<String>()
     text.split("\r\n", "\n")
@@ -922,7 +895,6 @@ private fun parseUrls(text: String): List<String> {
     return unique.toList()
 }
 
-// Fetch and cache metadata for a URL.
 private suspend fun fetchMetadataIfNeeded(
     url: String,
     metadataState: MutableMap<String, MetaState>
@@ -946,7 +918,6 @@ private suspend fun fetchMetadataIfNeeded(
     }
 }
 
-// Sequential bulk download runner.
 private suspend fun downloadAll(
     context: Context,
     urls: List<String>,
@@ -977,7 +948,6 @@ private suspend fun downloadAll(
     }
 }
 
-// Download + convert a single URL.
 private suspend fun downloadSingle(
     context: Context,
     url: String,
@@ -1081,12 +1051,10 @@ private suspend fun downloadSingle(
     )
 }
 
-// Builds the FFmpeg command used to convert to MP3.
 private fun buildFfmpegCommand(inputPath: String, outputPath: String, qualityOption: QualityOption): String {
     return "-y -i \"$inputPath\" -vn -codec:a libmp3lame ${qualityOption.ffmpegArgs} \"$outputPath\""
 }
 
-// Cleanup temporary files created during download/convert.
 private fun cleanupTempFiles(vararg files: File) {
     files.forEach { file ->
         if (file.exists()) {
@@ -1095,7 +1063,6 @@ private fun cleanupTempFiles(vararg files: File) {
     }
 }
 
-// Cache directory for temporary downloads.
 private fun resolveTempDir(context: Context): File {
     val tempDir = File(context.cacheDir, "downloads")
     if (!tempDir.exists()) {
@@ -1104,7 +1071,6 @@ private fun resolveTempDir(context: Context): File {
     return tempDir
 }
 
-// Save output to public Music/AudioGrab (or app folder on legacy).
 private fun saveToDefaultMusic(context: Context, source: File, fileName: String): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         saveToMediaStore(context, source, fileName)
@@ -1113,7 +1079,6 @@ private fun saveToDefaultMusic(context: Context, source: File, fileName: String)
     }
 }
 
-// MediaStore insert so file is visible in file managers.
 private fun saveToMediaStore(context: Context, source: File, fileName: String): String {
     val resolver = context.contentResolver
     val values = ContentValues().apply {
@@ -1133,7 +1098,6 @@ private fun saveToMediaStore(context: Context, source: File, fileName: String): 
     return fileName
 }
 
-// Legacy storage save path for pre-Android 10.
 private fun saveToLegacyMusic(source: File, fileName: String): String {
     val baseDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
     val outputDir = File(baseDir, "AudioGrab")
@@ -1149,7 +1113,6 @@ private fun saveToLegacyMusic(source: File, fileName: String): String {
     return target.absolutePath
 }
 
-// Save output to a user-chosen SAF folder.
 private fun copyToSaf(context: Context, folderUri: Uri, source: File, fileName: String): String {
     val contentResolver = context.contentResolver
     val folder = DocumentFile.fromTreeUri(context, folderUri) ?: return ""
@@ -1163,7 +1126,6 @@ private fun copyToSaf(context: Context, folderUri: Uri, source: File, fileName: 
     return target.name ?: fileName
 }
 
-// Creates a SAF file with a de-duplicated name.
 private fun createSafFile(folder: DocumentFile, fileName: String): DocumentFile {
     var candidateName = fileName
     var candidate = folder.findFile(candidateName)
@@ -1176,7 +1138,6 @@ private fun createSafFile(folder: DocumentFile, fileName: String): DocumentFile 
     return folder.createFile("audio/mpeg", candidateName) ?: folder
 }
 
-// Adds a (n) suffix to avoid name collisions.
 private fun appendSuffix(fileName: String, index: Int): String {
     val dotIndex = fileName.lastIndexOf('.')
     return if (dotIndex > 0) {
@@ -1188,7 +1149,6 @@ private fun appendSuffix(fileName: String, index: Int): String {
     }
 }
 
-// Produces a non-conflicting filename in a directory.
 private fun uniqueFile(directory: File, fileName: String): File {
     var candidate = File(directory, fileName)
     var index = 1
@@ -1199,7 +1159,6 @@ private fun uniqueFile(directory: File, fileName: String): File {
     return candidate
 }
 
-// App-private Music output folder (legacy usage only).
 private fun resolveOutputDir(context: Context): File {
     val baseDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC) ?: context.filesDir
     val outputDir = File(baseDir, "AudioGrab")
@@ -1209,7 +1168,6 @@ private fun resolveOutputDir(context: Context): File {
     return outputDir
 }
 
-// Sanitizes filenames to avoid invalid characters.
 private fun sanitizeFileName(raw: String): String {
     val cleaned = raw.replace("/", "-").replace("\\", "-").trim()
     return if (cleaned.isBlank()) {
@@ -1219,7 +1177,6 @@ private fun sanitizeFileName(raw: String): String {
     }
 }
 
-// Persist SAF permissions for future saves.
 private fun persistFolderPermission(context: Context, uri: Uri) {
     val resolver = context.contentResolver
     val flags = IntentFlags.readWrite
@@ -1235,7 +1192,6 @@ private object IntentFlags {
             android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 }
 
-// Download raw audio/video stream via NewPipe.
 private fun runNewPipeDownload(
     url: String,
     outputDir: File,
@@ -1276,7 +1232,6 @@ private fun runNewPipeDownload(
     }
 }
 
-// Extract metadata for a URL via NewPipe.
 private fun runNewPipeInfo(url: String): MetaResult {
     return try {
         val info = getStreamInfo(url)
@@ -1302,7 +1257,6 @@ private fun runNewPipeInfo(url: String): MetaResult {
     }
 }
 
-// Initialize the extractor with an OkHttp-backed downloader.
 private fun ensureNewPipeInitialized() {
     try {
         NewPipe.init(OkHttpDownloader())
@@ -1310,20 +1264,17 @@ private fun ensureNewPipeInitialized() {
     }
 }
 
-// Fetch StreamInfo from the extractor.
 private fun getStreamInfo(url: String): StreamInfo {
     val service = NewPipe.getServiceByUrl(url)
     return StreamInfo.getInfo(service, url)
 }
 
-// Select the highest-bitrate audio stream.
 private fun pickBestAudioStream(info: StreamInfo): AudioStream? {
     val streams = info.audioStreams ?: return null
     return streams.maxByOrNull { it.averageBitrate }
         ?: streams.firstOrNull()
 }
 
-// Pick a downloadable stream, preferring audio-only.
 private fun pickBestDownloadStream(info: StreamInfo): SelectedStream? {
     val audioStream = pickBestAudioStream(info)
     if (audioStream != null) {
@@ -1346,14 +1297,12 @@ private fun pickBestDownloadStream(info: StreamInfo): SelectedStream? {
     return null
 }
 
-// Fallback to a muxed (audio+video) stream if needed.
 private fun pickBestVideoStream(info: StreamInfo): VideoStream? {
     val streams = info.videoStreams?.filter { !it.isVideoOnly } ?: return null
     return streams.maxByOrNull { it.height }
         ?: streams.firstOrNull()
 }
 
-// Resolve URL vs content depending on stream representation.
 private fun resolveStreamUrl(stream: Stream): String? {
     return if (stream.isUrl) {
         stream.content
@@ -1362,7 +1311,6 @@ private fun resolveStreamUrl(stream: Stream): String? {
     }
 }
 
-// Choose the largest image available for preview.
 private fun pickBestImageUrl(images: List<Image>?): String {
     if (images.isNullOrEmpty()) return ""
     return images.maxByOrNull { image ->
@@ -1372,7 +1320,6 @@ private fun pickBestImageUrl(images: List<Image>?): String {
     }?.url.orEmpty()
 }
 
-// Download the selected stream to a local file.
 private fun downloadToFile(
     url: String,
     target: File,
@@ -1494,7 +1441,6 @@ private fun downloadToFile(
     onProgress(1f, "Merged & complete!")
 }
 
-// Single-threaded download fallback for unknown lengths.
 private fun singleDownloadToFile(
     url: String,
     target: File,
@@ -1583,7 +1529,6 @@ private fun singleDownloadToFile(
     }
 }
 
-// Common request headers used for streaming URLs.
 private fun baseRequestBuilder(
     url: String,
     normalizedReferer: String,
@@ -1609,7 +1554,6 @@ private fun baseRequestBuilder(
 }
 
 
-// Formats byte counts to human-readable strings.
 private fun formatBytes(bytes: Long): String {
     val unit = 1024.0
     if (bytes < unit) return "$bytes B"
@@ -1618,7 +1562,6 @@ private fun formatBytes(bytes: Long): String {
     return String.format("%.1f %sB", bytes / Math.pow(unit, exp.toDouble()), prefix)
 }
 
-// Normalize referer for youtu.be short links.
 private fun buildReferer(rawUrl: String): String {
     return try {
         val uri = URI(rawUrl)
@@ -1638,7 +1581,6 @@ private fun buildReferer(rawUrl: String): String {
     }
 }
 
-// Extract YouTube video ID from URL or short link.
 private fun extractYouTubeId(uri: URI): String {
     val host = uri.host.orEmpty()
     return if (host.contains("youtu.be")) {
@@ -1655,7 +1597,6 @@ private fun extractYouTubeId(uri: URI): String {
     }
 }
 
-// Build Origin header from a referer URL.
 private fun buildOrigin(referer: String): String {
     return try {
         val uri = URI(referer)
@@ -1671,7 +1612,6 @@ private fun buildOrigin(referer: String): String {
     }
 }
 
-// Downloader implementation used by NewPipe extractor.
 private class OkHttpDownloader : Downloader() {
     override fun execute(request: NewPipeRequest): Response {
         val builder = OkHttpRequest.Builder().url(request.url())
