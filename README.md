@@ -1,16 +1,35 @@
 # AudioGrab
 
-AudioGrab is an Android app that turns video links into MP3 files with previews, bulk downloads, and a clean on-device workflow. It uses NewPipeExtractor for metadata and stream discovery, and FFmpeg for audio conversion.
+AudioGrab turns video links into MP3s with previews, bulk downloads, and a simple on-device workflow.
 
-## Features
+## Download
 
-- Single and bulk link downloads
-- Metadata previews (title, channel, thumbnail)
-- MP3 conversion with quality presets
-- Optional custom save folder (SAF)
-- Public Music/AudioGrab default output
+- Latest APK: open the Releases page on GitHub.
 
-## Build
+## Highlights
+
+- Preview the title, channel, and thumbnail before downloading
+- MP3 output with quality presets
+- Bulk mode for multiple links at once
+- Default output to `Music/AudioGrab` or pick a folder
+
+## Quick start
+
+1. Paste a link
+2. Review the preview
+3. Tap Download MP3
+
+## Where files go
+
+- Default: `Music/AudioGrab`
+- If you choose a folder, files go there instead
+
+## Notes
+
+- Keep the app open during download and conversion
+- Some sources may require cookies; the settings screen includes an optional cookie field
+
+## Build (developers)
 
 ```bash
 ./gradlew assembleDebug
@@ -21,17 +40,6 @@ APK output:
 ```
 app/build/outputs/apk/debug/app-debug.apk
 ```
-
-## Install
-
-```bash
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-```
-
-## Notes
-
-- For some hosts, downloads may require additional headers or cookies.
-- Output defaults to `Music/AudioGrab` unless a custom folder is selected.
 
 ## License
 

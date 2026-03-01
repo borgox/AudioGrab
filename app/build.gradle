@@ -7,6 +7,23 @@ android {
     namespace "com.example.audiograb"
     compileSdk 34
 
+    def keystoreProperties = new Properties()
+    def localPropertiesFile = rootProject.file("local.properties")
+    def keystorePropertiesFile = null
+    if (localPropertiesFile.exists()) {
+        def localProps = new Properties()
+        localProps.load(new FileInputStream(localPropertiesFile))
+        if (localProps.getProperty("keystore.props")) {
+            keystorePropertiesFile = file(localProps.getProperty("keystore.props"))
+        }
+    }
+    if (keystorePropertiesFile == null && file("${rootProject.rootDir}/keystore.properties").exists()) {
+        keystorePropertiesFile = file("${rootProject.rootDir}/keystore.properties")
+    }
+    if (keystorePropertiesFile != null && keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
     defaultConfig {
         applicationId "com.example.audiograb"
         minSdk 26
@@ -23,8 +40,27 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            if (!keystoreProperties.isEmpty() && keystoreProperties["storeFile"]) {
+                storeFile file(keystoreProperties["storeFile"])
+                storePassword keystoreProperties["storePassword"]
+                keyAlias keystoreProperties["keyAlias"]
+                keyPassword keystoreProperties["keyPassword"]
+            }
+        }
+    }
+
     buildFeatures {
         compose true
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+        }
     }
 
     compileOptions {

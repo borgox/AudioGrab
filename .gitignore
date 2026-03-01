@@ -17,6 +17,9 @@ local.properties
 # Logs
 *.log
 
+# Artifacts
+*.apk
+
 # Signing
 *.jks
 *.keystore
